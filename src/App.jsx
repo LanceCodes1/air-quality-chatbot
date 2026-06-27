@@ -100,7 +100,9 @@ export default function App() {
     try {
       // Send the full conversation history to our backend, which calls Claude
       const updatedMessages = [...messages, userMessage]
-      const res = await fetch('http://localhost:3001/api/chat', {
+      // In development this hits localhost:3001, in production it hits Vercel's serverless function
+      const apiUrl = import.meta.env.DEV ? 'http://localhost:3001/api/chat' : '/api/chat'
+      const res = await fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
